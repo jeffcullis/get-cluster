@@ -72,7 +72,7 @@ sub read_mask
 			$boxcmd .= ($sc[$i]-$cbox) . ":" . ( $sc[$i]+$cbox) . " ";
 		}
 	}
-	open(IMASK, "-|", "3dmaskdump $boxcmd -xyz HAFA.nii") || die "Could not open the mask file $inmask\n";
+	open(IMASK, "-|", "3dmaskdump $boxcmd -xyz $inmask") || die "Could not open the mask file $inmask\n";
 
 	while(<IMASK>) {
 		my @line = split;
