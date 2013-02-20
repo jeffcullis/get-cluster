@@ -49,11 +49,11 @@ sub parse_cmds
 		open($ijk_fh, '>-'); # Write 1D to STDOUT
 	}
 	
-	$#raw_start_coords >= 0 || &die_usage;
+	$#raw_start_coords >= 0 || die_usage;
 	
 	foreach my $sc (@raw_start_coords) {
 		my @tmp = split(",", $sc);
-		$#tmp == 2 || $#tmp == 3 || &die_usage;
+		$#tmp == 2 || $#tmp == 3 || die_usage;
 		push(@tmp,1) if $#tmp == 2;
 		push @start_coords, [ @tmp ];
 	}
@@ -128,7 +128,7 @@ sub get_nbrs
 		for( my $dj = -1; $dj <= 1; $dj++ ) {
 			for( my $dk = -1; $dk <= 1; $dk++ ) {
 				my @nbr = ($i+$di, $j+$dj, $k+$dk);
-				push @coord_stack, [ @nbr ] if( &nbr_in_bounds(\@nbr) );
+				push @coord_stack, [ @nbr ] if( nbr_in_bounds(\@nbr) );
 			}
 		}
 	}	
@@ -169,12 +169,12 @@ sub fill_cluster
 		$full_mask[$i][$j][$k][-1] = -1;
 	
 		# Get the neighbours of the current voxel onto the @coord_stack.
-		&get_nbrs($coord_ref);
+		get_nbrs($coord_ref);
 	}
 }
 
-&parse_cmds;
-&read_mask;
+parse_cmds;
+read_mask;
 
 foreach my $sc_ref (@start_coords)
 {
@@ -183,7 +183,7 @@ foreach my $sc_ref (@start_coords)
 	my $maskval = $sc[3];
 	@coord_stack = (); # Empty the coord stack just in case. Should already be empty.
 	push @coord_stack, [@sc_ijk];
-	&fill_cluster($maskval);
+	fill_cluster($maskval);
 }
 
 if( $outijk ) {
